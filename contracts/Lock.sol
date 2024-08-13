@@ -1,49 +1,40 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.8;
+pragma solidity ^0.8.24;
 
-contract FreeBar{
+contract SimpleBank {
+    mapping(address => uint) private balances;
+    address public owner;
 
-    uint regId;
-
-    struct Person{
-        uint age;
-        uint id;
-        uint noOfDrinks;
-        address person;
+    constructor() {
+        owner = msg.sender;
     }
 
-    mapping (uint => Person) people;
-    mapping (address => bool) registered;
-
-
-    function register( uint _age) public returns (uint){
-          uint _id = regId + 1;
-    Person storage newPerson = people[_id];
-    require(!registered[msg.sender], "Already registered");
-
-    newPerson.age = _age;
-    newPerson.person = msg.sender;
-    newPerson.noOfDrinks = 0;
-    registered[msg.sender]= true;
-
-    regId++;
-    
-    return _id;
+    // Deposit Ether into the contract
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than zero");
+        balances[msg.sender] += msg.value;
     }
 
-    function orderDrink(uint _id) public   {
-        Person storage newPerson = people[_id];
-        require(newPerson.person == msg.sender, "not your id");
-        assert(newPerson.age > 18);
-        if (newPerson.noOfDrinks > 2){
-            revert();
+    // Withdraw Ether from the contract
+    function withdraw(uint amount) public {
+        // Check if the user has enough balance
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+
+        // Using assert to ensure the balance calculation is correct
+        uint oldBalance = balances[msg.sender];
+        balances[msg.sender] -= amount;
+        assert(balances[msg.sender] == oldBalance - amount);
+
+        // Transfer the amount to the user
+        (bool success, ) = msg.sender.call{value: amount}("");
+        if (!success) {
+            // If the transfer fails, revert the transaction
+            revert("Transfer failed");
         }
-        else{
-            newPerson.noOfDrinks ++;
-        }
-            
+    }
 
-
-
+    // Check balance
+    function getBalance() public view returns (uint) {
+        return balances[msg.sender];
     }
 }
