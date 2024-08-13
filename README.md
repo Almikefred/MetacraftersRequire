@@ -1,74 +1,135 @@
-FreeBar Smart Contract
-The FreeBar smart contract is designed to manage registrations and drink orders at a fictional bar. Users can register themselves and then order drinks, with specific rules and constraints enforced by the contract.
+SimpleBank Contract
 
-Contract Overview
-Name: FreeBar
-Solidity Version: ^0.8.8
-License: MIT
+
+Overview
+The SimpleBank contract is a basic Ethereum smart contract that allows users to deposit and withdraw Ether. This contract serves as an example of how to use Solidity's require(), assert(), and revert() statements to enforce conditions, check assumptions, and handle errors within smart contracts.
+
+
 Features
-Registration:
+Deposit Ether: Users can deposit Ether into the contract, which is recorded against their address.
 
-Users can register themselves by providing their age.
-Each user is assigned a unique ID upon registration.
-A user can only register once.
-Order Drink:
 
-Registered users can order drinks.
-A user can only order drinks using their own ID.
-Users must be older than 18 to order drinks.
-Each user is limited to a maximum of 3 drinks.
-Contract Details
-State Variables
-uint regId: Tracks the total number of registered users.
-struct Person: Represents a person with the following properties:
-uint age: The age of the person.
-uint id: The unique ID of the person.
-uint noOfDrinks: The number of drinks ordered by the person.
-address person: The address of the person.
-mapping (uint => Person) people: Maps a unique ID to a Person struct.
-mapping (address => bool) registered: Tracks whether an address has registered.
+Withdraw Ether: Users can withdraw Ether from the contract, subject to having a sufficient balance.
+
+
+Check Balance: Users can check their current balance in the contract.
+
+
+Solidity Version
+The contract is written in Solidity version ^0.8.24.
+
+Smart Contract Code
+
+
+
 Functions
-register
-solidity
-Copy code
-function register(uint _age) public returns (uint)
-Registers a new user.
+
+
+1. deposit()
+
+   
+Description: Allows users to deposit Ether into the contract. The deposited amount is added to the user's balance.
+
+
+Modifiers:
+
+
+payable: Allows the function to receive Ether.
+
+
+require(): Ensures that the deposit amount is greater than zero.
+
+
+2. withdraw(uint amount)
+
+3. 
+Description: Allows users to withdraw a specified amount of Ether from their balance. The contract checks if the user has enough balance and transfers the requested amount if possible.
+
 
 Parameters:
-uint _age: The age of the user.
-Returns:
-uint: The unique ID assigned to the registered user.
-Requirements:
-The user must not have registered before.
-Increments regId for the next registration.
-orderDrink
-solidity
-Copy code
-function orderDrink(uint _id) public
-Allows a registered user to order a drink.
 
-Parameters:
-uint _id: The unique ID of the user.
-Requirements:
-The user must be ordering using their own ID.
-The user must be older than 18.
-The user can order a maximum of 3 drinks.
+
+amount: The amount of Ether (in wei) to withdraw.
+
+
+Modifiers:
+
+
+require(): Ensures the user has enough balance.
+
+
+assert(): Verifies that the balance is correctly updated after withdrawal.
+
+
+revert(): Reverts the transaction if the Ether transfer fails.
+
+
+getBalance()
+
+   
+Description: Allows users to check their current balance in the contract.
+
+
+Returns: The balance of the caller (in wei).
+
+
+Error Handling
+
+
+The contract uses the following Solidity error handling mechanisms:
+
+
+require():
+
+
+Ensures that certain conditions are met before proceeding with a function execution. If the condition fails, the function execution is halted and any changes are reverted.
+
+
+assert():
+
+
+Used to check for conditions that should never be false. If an assert() statement fails, it indicates a bug in the contract and will cause the contract execution to be reverted.
+
+
+revert():
+
+
+Used to manually trigger an error, reverting the transaction and any state changes if something goes wrong.
+
+
+Deployment
+
+
+To deploy the contract, follow these steps:
+
+
+Compile the SimpleBank contract using a Solidity compiler (solc) or any development environment like Remix, Hardhat, or Truffle.
+
+
+Deploy the contract on an Ethereum network (such as a testnet or local development network).
 Usage
-Deploying the Contract
-Deploy the FreeBar contract to your desired Ethereum network using your preferred tool (e.g., Remix, Hardhat, Truffle).
 
-Interacting with the Contract
-Register a User:
-Call the register function with the user's age as the argument.
 
-solidity
-Copy code
-freeBar.register(25);
-Order a Drink:
-Call the orderDrink function with the user's unique ID as the argument.
+Deposit Ether:
 
-solidity
-Copy code
-freeBar.orderDrink(1);
+
+Call the deposit() function and send the desired amount of Ether.
+
+
+Withdraw Ether:
+
+
+Call the withdraw() function with the amount of Ether you wish to withdraw.
+
+
+Check Balance:
+
+
+Call the getBalance() function to check your current balance in the contract.
+
+
 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+
+This project is licensed under the MIT License.
+
