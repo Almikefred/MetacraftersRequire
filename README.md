@@ -2,6 +2,8 @@ SimpleBank Contract
 
 
 Overview
+
+
 The SimpleBank contract is a basic Ethereum smart contract that allows users to deposit and withdraw Ether. This contract serves as an example of how to use Solidity's require(), assert(), and revert() statements to enforce conditions, check assumptions, and handle errors within smart contracts.
 
 
@@ -25,7 +27,7 @@ Smart Contract Code
 Functions
 
 
-1. deposit()
+deposit()
 
    
 Description: Allows users to deposit Ether into the contract. The deposited amount is added to the user's balance.
@@ -40,9 +42,9 @@ payable: Allows the function to receive Ether.
 require(): Ensures that the deposit amount is greater than zero.
 
 
-2. withdraw(uint amount)
+withdraw(uint amount)
 
-3. 
+
 Description: Allows users to withdraw a specified amount of Ether from their balance. The contract checks if the user has enough balance and transfers the requested amount if possible.
 
 
