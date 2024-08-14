@@ -1,40 +1,61 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-contract SimpleBank {
-    mapping(address => uint) private balances;
-    address public owner;
 
-    constructor() {
-        owner = msg.sender;
+contract DrivingSchool{
+
+    uint studentCounter;
+    
+    struct Student{
+        address student;
+        uint id;
+        uint age;
+        bool registrationStatus;
+        bool licenseStatus;
+        uint licenseExpiryDate;
     }
 
-    // Deposit Ether into the contract
-    function deposit() public payable {
-        require(msg.value > 0, "Deposit amount must be greater than zero");
-        balances[msg.sender] += msg.value;
+    mapping(address => Student) students;
+
+    function register(uint _age) public returns(bool){
+        studentCounter++;
+        Student storage newStudent = students[msg.sender];
+
+       if (newStudent.registrationStatus){
+            revert("Already registered");
+       }
+        newStudent.student = msg.sender;
+        newStudent.id = studentCounter;
+        newStudent.age = _age;
+        newStudent.registrationStatus = true;
+
+        return true;
     }
 
-    // Withdraw Ether from the contract
-    function withdraw(uint amount) public {
-        // Check if the user has enough balance
-        require(balances[msg.sender] >= amount, "Insufficient balance");
+    function getLicense(uint _testScore) public {
+        Student storage newStudent = students[msg.sender];
+        require(newStudent.registrationStatus, "You are not Registered");
+        
+        assert(newStudent.age >= 18);
 
-        // Using assert to ensure the balance calculation is correct
-        uint oldBalance = balances[msg.sender];
-        balances[msg.sender] -= amount;
-        assert(balances[msg.sender] == oldBalance - amount);
-
-        // Transfer the amount to the user
-        (bool success, ) = msg.sender.call{value: amount}("");
-        if (!success) {
-            // If the transfer fails, revert the transaction
-            revert("Transfer failed");
+        if(_testScore >= 60){
+            newStudent.licenseStatus = true;
+            newStudent.licenseExpiryDate = block.timestamp + 31536000;
         }
+            else {
+                revert("Not eligible");
+            }
+
+
     }
 
-    // Check balance
-    function getBalance() public view returns (uint) {
-        return balances[msg.sender];
+    function getStudentLicenseStatus(address _student) public view returns(bool){
+        Student storage newStudent = students[_student];
+
+        return newStudent.licenseStatus;
+    }
+
+    function getStudentDetails(address _student) public view returns(Student memory){
+        return students[_student];
     }
 }
