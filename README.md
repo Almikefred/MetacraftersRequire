@@ -1,137 +1,94 @@
-SimpleBank Contract
+# DrivingSchool Smart Contract
 
+This smart contract, `DrivingSchool`, is designed to manage the registration and licensing of students in a decentralized driving school system. It allows students to register, take a driving test, and receive a license if they pass.
 
-Overview
+## Overview
 
+The `DrivingSchool` contract enables the following functionalities:
+- Register a student.
+- Assign a license to a student if they pass the driving test.
+- Retrieve the license status and details of a student.
 
-The SimpleBank contract is a basic Ethereum smart contract that allows users to deposit and withdraw Ether. This contract serves as an example of how to use Solidity's require(), assert(), and revert() statements to enforce conditions, check assumptions, and handle errors within smart contracts.
+## Contract Details
 
+### State Variables
 
-Features
-Deposit Ether: Users can deposit Ether into the contract, which is recorded against their address.
+- **studentCounter**: A counter that increments with each new student registration.
+- **Student**: A struct representing a student with the following properties:
+  - `address student`: The student's Ethereum address.
+  - `uint id`: A unique identifier for the student.
+  - `uint age`: The student's age.
+  - `bool registrationStatus`: A flag indicating whether the student is registered.
+  - `bool licenseStatus`: A flag indicating whether the student has obtained a license.
+  - `uint licenseExpiryDate`: The expiry date of the student's license.
 
+- **students**: A mapping from student addresses to their corresponding `Student` struct.
 
-Withdraw Ether: Users can withdraw Ether from the contract, subject to having a sufficient balance.
+### Functions
 
+#### `register(uint _age) public returns(bool)`
 
-Check Balance: Users can check their current balance in the contract.
+Registers a new student with the given age.
 
+- **Parameters**:
+  - `_age`: The age of the student.
+  
+- **Returns**:
+  - `true` if the registration is successful.
+  
+- **Reverts**:
+  - If the student is already registered.
 
-Solidity Version
-The contract is written in Solidity version ^0.8.24.
+#### `getLicense(uint _testScore) public`
 
-Smart Contract Code
+Issues a driving license to a registered student if they pass the driving test.
 
+- **Parameters**:
+  - `_testScore`: The score obtained in the driving test.
 
+- **Reverts**:
+  - If the student is not registered.
+  - If the student's age is below 18.
+  - If the student's test score is below the passing threshold (60).
 
-Functions
+- **Effects**:
+  - Assigns a license to the student if they pass the test.
+  - Sets the license expiry date to one year from the current time.
 
+#### `getStudentLicenseStatus(address _student) public view returns(bool)`
 
-deposit()
+Checks the license status of a specific student.
 
-   
-Description: Allows users to deposit Ether into the contract. The deposited amount is added to the user's balance.
+- **Parameters**:
+  - `_student`: The address of the student.
 
+- **Returns**:
+  - `true` if the student has a valid license, otherwise `false`.
 
-Modifiers:
+#### `getStudentDetails(address _student) public view returns(Student memory)`
 
+Retrieves the complete details of a specific student.
 
-payable: Allows the function to receive Ether.
+- **Parameters**:
+  - `_student`: The address of the student.
 
+- **Returns**:
+  - The `Student` struct containing the student's details.
 
-require(): Ensures that the deposit amount is greater than zero.
+## Usage
 
+1. **Register a Student**: 
+   - Call the `register` function with the student's age.
+  
+2. **Get a License**:
+   - After registration, call the `getLicense` function with the student's test score.
 
-withdraw(uint amount)
+3. **Check License Status**:
+   - Use `getStudentLicenseStatus` to check if a student has a valid license.
 
+4. **Get Student Details**:
+   - Use `getStudentDetails` to retrieve all details of a student.
 
-Description: Allows users to withdraw a specified amount of Ether from their balance. The contract checks if the user has enough balance and transfers the requested amount if possible.
-
-
-Parameters:
-
-
-amount: The amount of Ether (in wei) to withdraw.
-
-
-Modifiers:
-
-
-require(): Ensures the user has enough balance.
-
-
-assert(): Verifies that the balance is correctly updated after withdrawal.
-
-
-revert(): Reverts the transaction if the Ether transfer fails.
-
-
-getBalance()
-
-   
-Description: Allows users to check their current balance in the contract.
-
-
-Returns: The balance of the caller (in wei).
-
-
-Error Handling
-
-
-The contract uses the following Solidity error handling mechanisms:
-
-
-require():
-
-
-Ensures that certain conditions are met before proceeding with a function execution. If the condition fails, the function execution is halted and any changes are reverted.
-
-
-assert():
-
-
-Used to check for conditions that should never be false. If an assert() statement fails, it indicates a bug in the contract and will cause the contract execution to be reverted.
-
-
-revert():
-
-
-Used to manually trigger an error, reverting the transaction and any state changes if something goes wrong.
-
-
-Deployment
-
-
-To deploy the contract, follow these steps:
-
-
-Compile the SimpleBank contract using a Solidity compiler (solc) or any development environment like Remix, Hardhat, or Truffle.
-
-
-Deploy the contract on an Ethereum network (such as a testnet or local development network).
-Usage
-
-
-Deposit Ether:
-
-
-Call the deposit() function and send the desired amount of Ether.
-
-
-Withdraw Ether:
-
-
-Call the withdraw() function with the amount of Ether you wish to withdraw.
-
-
-Check Balance:
-
-
-Call the getBalance() function to check your current balance in the contract.
-
-
-License
-
+## License
 
 This project is licensed under the MIT License.
-
