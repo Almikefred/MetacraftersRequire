@@ -22,23 +22,27 @@ To deploy the `DrivingSchool` contract, follow these steps:
 To interact with the `DrivingSchool` contract, you can use any Ethereum development environment like [Remix](https://remix.ethereum.org/) or Hardhat.
 
 **Register a Student:**  
+
 Students can register themselves using the `register` function:
 ```javascript
 register(uint _age) public returns(bool)
 ```
 **Get a License:**
+
 After registration, students can obtain a driving license by passing the test using the getLicense function:
 
 ```javascript
 getLicense(uint _testScore) public
 ```
 **Check License Status:**
+
 To check if a student has a valid license, use the getStudentLicenseStatus function:
 
 ```javascript
 getStudentLicenseStatus(address _student) public view returns(bool)
 ```
 **Retrieve Student Details:**
+
 To retrieve the complete details of a student, use the getStudentDetails function:
 
 ```javascript
@@ -49,4 +53,5 @@ getStudentDetails(address _student) public view returns(Student memory)
 Alfred Michael
 
 **License**
+
 This project is licensed under the MIT License.
