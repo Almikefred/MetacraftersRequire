@@ -26,23 +26,27 @@ Students can register themselves using the `register` function:
 ```javascript
 register(uint _age) public returns(bool)
 ```
-Get a License:
+**Get a License:**
 After registration, students can obtain a driving license by passing the test using the getLicense function:
 
 ```javascript
 getLicense(uint _testScore) public
 ```
-Check License Status:
+**Check License Status:**
 To check if a student has a valid license, use the getStudentLicenseStatus function:
 
 ```javascript
 getStudentLicenseStatus(address _student) public view returns(bool)
 ```
-Retrieve Student Details:
+**Retrieve Student Details:**
 To retrieve the complete details of a student, use the getStudentDetails function:
 
 ```javascript
 getStudentDetails(address _student) public view returns(Student memory)
 ```
-License
+**Author**
+
+Alfred Michael
+
+**License**
 This project is licensed under the MIT License.
